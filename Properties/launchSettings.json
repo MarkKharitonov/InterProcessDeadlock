@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "InterProcessDeadlock": {
+      "commandName": "Project",
+      "commandLineArgs": "parent 86 this is a somewhat long stderr output line"
+    }
+  }
+}

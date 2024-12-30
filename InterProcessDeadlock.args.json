@@ -1,0 +1,10 @@
+{
+  "FileVersion": 2,
+  "Id": "de3024c6-1844-422b-ae74-3066236de533",
+  "Items": [
+    {
+      "Id": "b501c7ec-f098-4bee-8e10-c292e2483348",
+      "Command": "parent 86 this is a somewhat long stderr output line"
+    }
+  ]
+}
