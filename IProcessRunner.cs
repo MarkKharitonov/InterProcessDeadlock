@@ -57,13 +57,12 @@ public class ProcessRunner : IProcessRunner
 
             process.Start();
 
-            string? line;
-            while ((line = await process.StandardOutput.ReadLineAsync(cancellationToken)) != null)
-            {
-                notifyStdOutLine?.Invoke(line);
-            }
-
-            stdErr = await process.StandardError.ReadToEndAsync(cancellationToken);
+            Task[] tasks = [
+                ReadStdOutAsync(notifyStdOutLine, process, cancellationToken),
+                process.StandardError.ReadToEndAsync(cancellationToken)
+            ];
+            await Task.WhenAll(tasks);
+            stdErr = ((Task<string>)tasks[1]).Result;
         }
         catch (Exception ex)
         {
@@ -80,5 +79,14 @@ public class ProcessRunner : IProcessRunner
         }
 
         return new ProcessRunnerResult(process.ExitCode, stdErr);
+    }
+
+    private static async Task ReadStdOutAsync(Action<string>? notifyStdOutLine, Process process, CancellationToken cancellationToken)
+    {
+        string? line;
+        while ((line = await process.StandardOutput.ReadLineAsync(cancellationToken)) != null)
+        {
+            notifyStdOutLine?.Invoke(line);
+        }
     }
 }
